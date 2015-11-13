@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using YesChef_DataClasses;
+
+namespace YesChef_DataLayer
+{
+    public class YesChefContext : DbContext
+    {
+        public YesChefContext() : base("name=YesChef") { }
+
+        public DbSet<QuantityType> QuantityTypes { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Recipe> Recipies { get; set; }
+        public DbSet<Step> Steps { get; set; }
+        public DbSet<StepDependancy> StepDependancies { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //Recipe
+            modelBuilder.Entity<Recipe>().Property(r => r.Name).IsRequired();
+
+            //Ingredient
+            modelBuilder.Entity<Ingredient>().Property(i => i.Name).IsRequired();
+
+            //ChildStep
+            modelBuilder.Entity<Step>().Property(i => i.Description).IsRequired();
+
+            //Step Dependancy
+            modelBuilder.Entity<StepDependancy>()
+                .HasRequired(sd => sd.ChildStep)
+                .WithMany(sd => sd.Dependancies)
+                .HasForeignKey(sd => sd.ChildStepId)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<StepDependancy>()
+                .HasRequired(sd => sd.ParentStep)
+                .WithMany(sd => sd.Dependants)
+                .HasForeignKey(sd => sd.ParentStepId)
+                .WillCascadeOnDelete(false);
+        }
+    }
+}
