@@ -49,8 +49,8 @@ namespace YesChef_DataLayer.Tests
 
             step1 = StepHandler.GetStep(step1.Id);
             step3 = StepHandler.GetStep(step3.Id);
-            Assert.That(step3.Dependancies.Count, Is.EqualTo(2));
-            Assert.That(step1.Dependants.ToList()[0].ChildStepId, Is.EqualTo(step3.Id));
+            Assert.That(step3.StepDependancies.Count, Is.EqualTo(2));
+            Assert.That(step1.StepDependants.ToList()[0].ChildStepId, Is.EqualTo(step3.Id));
         }
 
         [Test]

@@ -20,10 +20,10 @@ namespace YesChef_DataLayer.Tests
             var qt = QuantityTypeHandler.CreateQuantityType(string.Format("quantityTypeName_{0}", Guid.NewGuid().ToString()));
             Assert.That(qt, !Is.Null);
 
-            Ingredient i = IngredientHandler.CreateIngredient(
+            var i = IngredientHandler.CreateIngredient(
                 recipe: r, 
                 quantityType: qt,
-                name: string.Format("ingredientName_{0}", Guid.NewGuid().ToString()),
+                name: string.Format("ingredientName_{0}", Guid.NewGuid()),
                 quantity: 1);
             Assert.That(i, !Is.Null);
             Assert.That(i.Id, Is.GreaterThan(0));

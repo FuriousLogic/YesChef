@@ -52,7 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityTypeHandler.cs" />
     <Compile Include="RecipeHandler.cs" />
-    <Compile Include="IngredientHndler.cs" />
+    <Compile Include="IngredientHandler.cs" />
     <Compile Include="StepDependancyHandler.cs" />
     <Compile Include="StepHandler.cs" />
     <Compile Include="YesChefContext.cs" />

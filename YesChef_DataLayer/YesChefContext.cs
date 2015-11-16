@@ -32,12 +32,12 @@ namespace YesChef_DataLayer
             //Step Dependancy
             modelBuilder.Entity<StepDependancy>()
                 .HasRequired(sd => sd.ChildStep)
-                .WithMany(sd => sd.Dependancies)
+                .WithMany(sd => sd.StepDependancies)
                 .HasForeignKey(sd => sd.ChildStepId)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<StepDependancy>()
                 .HasRequired(sd => sd.ParentStep)
-                .WithMany(sd => sd.Dependants)
+                .WithMany(sd => sd.StepDependants)
                 .HasForeignKey(sd => sd.ParentStepId)
                 .WillCascadeOnDelete(false);
         }

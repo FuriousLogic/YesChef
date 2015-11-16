@@ -19,6 +19,7 @@ namespace YesChef_DataLayer
                 QuantityType = quantityType,
                 Quantity = quantity
             });
+            db.SaveChanges();
 
             return ri;
         }
