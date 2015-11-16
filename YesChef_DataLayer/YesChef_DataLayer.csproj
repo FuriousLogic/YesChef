@@ -49,6 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataClasses\Ingredient.cs" />
+    <Compile Include="DataClasses\QuantityType.cs" />
+    <Compile Include="DataClasses\Recipe.cs" />
+    <Compile Include="DataClasses\Step.cs" />
+    <Compile Include="DataClasses\StepDependancy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityTypeHandler.cs" />
     <Compile Include="RecipeHandler.cs" />
@@ -56,12 +61,6 @@
     <Compile Include="StepDependancyHandler.cs" />
     <Compile Include="StepHandler.cs" />
     <Compile Include="YesChefContext.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\YesChef_DataClasses\YesChef_DataClasses.csproj">
-      <Project>{5b53f054-a550-4b7d-bd63-a431cb60aae1}</Project>
-      <Name>YesChef_DataClasses</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

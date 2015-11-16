@@ -67,10 +67,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\YesChef_DataClasses\YesChef_DataClasses.csproj">
-      <Project>{5b53f054-a550-4b7d-bd63-a431cb60aae1}</Project>
-      <Name>YesChef_DataClasses</Name>
-    </ProjectReference>
     <ProjectReference Include="..\YesChef_DataLayer\YesChef_DataLayer.csproj">
       <Project>{26e3f3e8-2aa0-4df1-8b4f-9cb76775c6d4}</Project>
       <Name>YesChef_DataLayer</Name>
