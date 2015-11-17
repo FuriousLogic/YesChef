@@ -1,12 +1,12 @@
-﻿namespace YesChef_DataClasses
+﻿namespace YesChef_DataLayer.DataClasses
 {
-    public class Ingredient
+    public sealed class Ingredient
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
 
-        public virtual Recipe Recipe { get; set; }
-        public virtual QuantityType QuantityType { get; set; }
+        public Recipe Recipe { get; set; }
+        public QuantityType QuantityType { get; set; }
     }
 }

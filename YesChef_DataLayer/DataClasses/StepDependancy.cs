@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace YesChef_DataClasses
+﻿namespace YesChef_DataLayer.DataClasses
 {
-    public class StepDependancy
+    public sealed class StepDependancy
     {
         public int Id { get; set; }
         public int ChildStepId { get; set; }
         public int ParentStepId { get; set; }
 
-        public virtual Step ChildStep { get; set; }
-        public virtual Step ParentStep { get; set; }
+        public Step ChildStep { get; set; }
+        public Step ParentStep { get; set; }
     }
 }

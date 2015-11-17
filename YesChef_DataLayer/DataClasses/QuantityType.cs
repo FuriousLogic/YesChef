@@ -1,6 +1,6 @@
-﻿namespace YesChef_DataClasses
+﻿namespace YesChef_DataLayer.DataClasses
 {
-    public class QuantityType
+    public sealed class QuantityType
     {
         public int Id { get; set; }
         public string Name { get; set; }

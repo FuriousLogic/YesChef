@@ -1,4 +1,4 @@
-﻿using YesChef_DataClasses;
+﻿using YesChef_DataLayer.DataClasses;
 
 namespace YesChef_DataLayer
 {

@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassExtenders\StepExtender.cs" />
     <Compile Include="DataClasses\Ingredient.cs" />
     <Compile Include="DataClasses\QuantityType.cs" />
     <Compile Include="DataClasses\Recipe.cs" />

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace YesChef_DataClasses
+namespace YesChef_DataLayer.DataClasses
 {
-    public class Recipe
+    public sealed class Recipe
     {
         public Recipe()
         {
@@ -13,7 +13,7 @@ namespace YesChef_DataClasses
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
-        public virtual ICollection<Step> Steps { get; set; }
+        public ICollection<Ingredient> Ingredients { get; set; }
+        public ICollection<Step> Steps { get; set; }
     }
 }

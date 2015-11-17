@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YesChef_DataClasses;
+using YesChef_DataLayer.DataClasses;
 
 namespace YesChef_DataLayer
 {
@@ -26,6 +26,18 @@ namespace YesChef_DataLayer
         {
             var db = new YesChefContext();
             return db.Steps.Find(stepId);
+        }
+
+        public static List<Step> GetChildSteps(int stepId)
+        {
+            var db = new YesChefContext();
+            return (from sd in db.StepDependancies where sd.ParentStepId==stepId select sd.ChildStep).ToList();
+        }
+
+        public static List<Step> GetParentSteps(int stepId)
+        {
+            var db = new YesChefContext();
+            return (from sd in db.StepDependancies where sd.ChildStepId == stepId select sd.ParentStep).ToList();
         }
     }
 }

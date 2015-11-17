@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace YesChef_DataClasses
+namespace YesChef_DataLayer.DataClasses
 {
-    public partial class Step
+    public sealed partial class Step
     {
         public Step()
         {
@@ -14,8 +14,8 @@ namespace YesChef_DataClasses
         public string Description { get; set; }
         public int MinutesDuration { get; set; }
 
-        public virtual Recipe Recipe { get; set; }
-        public virtual ICollection<StepDependancy> StepDependancies { get; set; }
-        public virtual ICollection<StepDependancy> StepDependants { get; set; }
+        public Recipe Recipe { get; set; }
+        public ICollection<StepDependancy> StepDependancies { get; set; }
+        public ICollection<StepDependancy> StepDependants { get; set; }
     }
 }
