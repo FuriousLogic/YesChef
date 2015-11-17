@@ -28,7 +28,17 @@ namespace YesChef_DataLayer.Tests
         [Test]
         public void ShouldNotCreateStepDependancyASecondTime()
         {
-            Assert.Fail();
+            var recipe = RecipeHandler.CreateRecipe($"recipeName {Guid.NewGuid()}");
+            Assert.That(recipe, !Is.Null);
+            var step1 = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 1, recipe);
+            Assert.That(step1, !Is.Null);
+            var step2 = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 1, recipe);
+            Assert.That(step2, !Is.Null);
+
+            var stepDependancy = StepDependancyHandler.CreateStepDependancy(step1, step2);
+            Assert.That(stepDependancy, !Is.Null);
+
+            Assert.That(() => StepDependancyHandler.CreateStepDependancy(step1, step2), Throws.Exception);
         }
     }
 }
