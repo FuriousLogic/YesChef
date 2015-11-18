@@ -23,5 +23,15 @@ namespace YesChef_DataLayer
             var db = new YesChefContext();
             return db.Recipies.ToList();
         }
+
+        public static int GetRecipeBusyTime(Recipe recipe)
+        {
+            return recipe.Steps.Where(step => !step.IsFreeTime).Sum(step => step.MinutesDuration);
+        }
+
+        public static int GetRecipeFreeTime(Recipe recipe)
+        {
+            return recipe.Steps.Where(step => step.IsFreeTime).Sum(step => step.MinutesDuration);
+        }
     }
 }

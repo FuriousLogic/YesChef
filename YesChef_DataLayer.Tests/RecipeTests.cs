@@ -26,12 +26,70 @@ namespace YesChef_DataLayer.Tests
         [Test]
         public void ShouldGetAllRecipies()
         {
-            List<Recipe> recipies = RecipeHandler.GetAllRecipies();
+            var recipies = RecipeHandler.GetAllRecipies();
             Assert.That(recipies, !Is.Null);
 
-            var r = RecipeHandler.CreateRecipe(string.Format("RecipeName_{0}", Guid.NewGuid().ToString()));
+            var recipe = RecipeHandler.CreateRecipe($"RecipeName_{Guid.NewGuid()}");
 
             Assert.That(recipies.Count, Is.LessThan(RecipeHandler.GetAllRecipies().Count));
+        }
+
+        [Test]
+        public void ShouldCalcTimeForOneStepRecipe()
+        {
+            var recipe = RecipeHandler.CreateRecipe($"recipe name {Guid.NewGuid()}");
+            StepHandler.CreateStep($"description {Guid.NewGuid()}", 9, recipe);
+
+            var minutes = RecipeHandler.GetRecipeBusyTime(recipe);
+
+            Assert.That(minutes, Is.EqualTo(9));
+        }
+
+        [Test]
+        public void ShouldCalcTimeForSeriesStepRecipe()
+        {
+            var recipe = RecipeHandler.CreateRecipe($"recipe name {Guid.NewGuid()}");
+
+            var step1 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 7, recipe);
+            var step2 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 8, recipe);
+            var step3 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 9, recipe);
+
+            StepDependancyHandler.CreateStepDependancy(step1, step2);
+            StepDependancyHandler.CreateStepDependancy(step2, step3);
+
+            var minutes = RecipeHandler.GetRecipeBusyTime(recipe);
+
+            Assert.That(minutes, Is.EqualTo(24));
+        }
+
+        [Test]
+        public void ShouldCalcTimeForParallelStepRecipeNoFreeTime()
+        {
+            var recipe = RecipeHandler.CreateRecipe($"recipe name {Guid.NewGuid()}");
+
+            var step1 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 7, recipe);
+            var step2 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 8, recipe);
+
+            var minutesBusy = RecipeHandler.GetRecipeBusyTime(recipe);
+            var minutesFree = RecipeHandler.GetRecipeFreeTime(recipe);
+
+            Assert.That(minutesBusy, Is.EqualTo(15));
+            Assert.That(minutesFree, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ShouldCalcTimeForParallelStepRecipeFreeTime()
+        {
+            var recipe = RecipeHandler.CreateRecipe($"recipe name {Guid.NewGuid()}");
+
+            var step1 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 7, recipe, isFreeTime: true);
+            var step2 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 8, recipe);
+
+            var minutesBusy = RecipeHandler.GetRecipeBusyTime(recipe);
+            var minutesFree = RecipeHandler.GetRecipeFreeTime(recipe);
+
+            Assert.That(minutesBusy, Is.EqualTo(8));
+            Assert.That(minutesFree, Is.EqualTo(7));
         }
     }
 }
