@@ -51,14 +51,21 @@
   <ItemGroup>
     <Compile Include="ClassExtenders\StepExtender.cs" />
     <Compile Include="DataClasses\Ingredient.cs" />
+    <Compile Include="DataClasses\Meal.cs" />
     <Compile Include="DataClasses\QuantityType.cs" />
     <Compile Include="DataClasses\Recipe.cs" />
+    <Compile Include="DataClasses\RecipeInstance.cs" />
+    <Compile Include="DataClasses\SousChef.cs" />
     <Compile Include="DataClasses\Step.cs" />
     <Compile Include="DataClasses\StepDependancy.cs" />
+    <Compile Include="EncryptionHandler.cs" />
+    <Compile Include="MealHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityTypeHandler.cs" />
     <Compile Include="RecipeHandler.cs" />
     <Compile Include="IngredientHandler.cs" />
+    <Compile Include="RecipeInstanceHandler.cs" />
+    <Compile Include="SousChefHandler.cs" />
     <Compile Include="StepDependancyHandler.cs" />
     <Compile Include="StepHandler.cs" />
     <Compile Include="YesChefContext.cs" />

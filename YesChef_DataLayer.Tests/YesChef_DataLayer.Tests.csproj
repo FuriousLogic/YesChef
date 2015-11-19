@@ -53,10 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EncryptionTests.cs" />
+    <Compile Include="MealTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityTypeTests.cs" />
+    <Compile Include="RecipeInstanceTests.cs" />
     <Compile Include="RecipeItemTests.cs" />
     <Compile Include="RecipeTests.cs" />
+    <Compile Include="SousChefTests.cs" />
     <Compile Include="StepDependancyTests.cs" />
     <Compile Include="StepTests.cs" />
   </ItemGroup>
