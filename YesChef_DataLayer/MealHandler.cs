@@ -22,5 +22,18 @@ namespace YesChef_DataLayer
 
             return meal;
         }
+
+        public static Meal CreateMeal(string name, SousChef sousChef, Recipe recipe)
+        {
+            var meal = CreateMeal(name, sousChef);
+            RecipeInstanceHandler.CreateRecipeInstance(recipe, meal);
+            return meal; 
+        }
+
+        public static Meal AddRecipe(Meal meal, Recipe recipe)
+        {
+            RecipeInstanceHandler.CreateRecipeInstance(recipe, meal);
+            return meal;
+        }
     }
 }
