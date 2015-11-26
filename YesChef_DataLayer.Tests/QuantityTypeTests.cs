@@ -9,7 +9,6 @@ using YesChef_DataLayer.DataClasses;
 namespace YesChef_DataLayer.Tests
 {
     [TestFixture]
-    [Ignore]
     public class QuantityTypeTests
     {
         [Test]

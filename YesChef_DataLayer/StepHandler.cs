@@ -35,16 +35,16 @@ namespace YesChef_DataLayer
                 .Single(s => s.Id==stepId);
         }
 
-        //public static List<Step> GetChildSteps(int stepId)
-        //{
-        //    var db = new YesChefContext();
-        //    return (from sd in db.StepDependancies where sd.ParentStepId == stepId select sd.ChildStep).ToList();
-        //}
+        public static List<Step> GetChildSteps(int stepId)
+        {
+            var db = new YesChefContext();
+            return (from sd in db.StepDependancies where sd.ParentStepId == stepId select sd.ChildStep).ToList();
+        }
 
-        //public static List<Step> GetParentSteps(int stepId)
-        //{
-        //    var db = new YesChefContext();
-        //    return (from sd in db.StepDependancies where sd.ChildStepId == stepId select sd.ParentStep).ToList();
-        //}
+        public static List<Step> GetParentSteps(int stepId)
+        {
+            var db = new YesChefContext();
+            return (from sd in db.StepDependancies where sd.ChildStepId == stepId select sd.ParentStep).ToList();
+        }
     }
 }

@@ -8,8 +8,6 @@ namespace YesChef_DataLayer.DataClasses
     {
         public Step()
         {
-            //StepDependancies = new List<StepDependancy>();
-            //StepDependants = new List<StepDependancy>();
         }
 
         public int Id { get; private set; }
@@ -23,7 +21,7 @@ namespace YesChef_DataLayer.DataClasses
         [ForeignKey("RecipeId")]
         public Recipe Recipe { get; set; }
 
-        //public ICollection<StepDependancy> StepDependancies { get; set; }
-        //public ICollection<StepDependancy> StepDependants { get; set; }
+        public ICollection<StepDependancy> StepDependancies { get; set; } = new List<StepDependancy>();
+        public ICollection<StepDependancy> StepDependants { get; set; } = new List<StepDependancy>();
     }
 }

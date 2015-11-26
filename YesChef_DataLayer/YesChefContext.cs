@@ -16,7 +16,7 @@ namespace YesChef_DataLayer
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recipe> Recipies { get; set; }
         public DbSet<Step> Steps { get; set; }
-        //public DbSet<StepDependancy> StepDependancies { get; set; }
+        public DbSet<StepDependancy> StepDependancies { get; set; }
         //public DbSet<SousChef> SousChefs { get; set; }
         //public DbSet<Meal> Meals { get; set; }
         //public DbSet<RecipeInstance> RecipeInstances { get; set; }
@@ -48,17 +48,17 @@ namespace YesChef_DataLayer
             //    .HasForeignKey(s => s.RecipeId)
             //    .WillCascadeOnDelete(true);
 
-            ////Step Dependancy
-            //modelBuilder.Entity<StepDependancy>()
-            //    .HasRequired(sd => sd.ChildStep)
-            //    .WithMany(sd => sd.StepDependancies)
-            //    .HasForeignKey(sd => sd.ChildStepId)
-            //    .WillCascadeOnDelete(false);
-            //modelBuilder.Entity<StepDependancy>()
-            //    .HasRequired(sd => sd.ParentStep)
-            //    .WithMany(sd => sd.StepDependants)
-            //    .HasForeignKey(sd => sd.ParentStepId)
-            //    .WillCascadeOnDelete(false);
+            //Step Dependancy
+            modelBuilder.Entity<StepDependancy>()
+                .HasRequired(sd => sd.ChildStep)
+                .WithMany(sd => sd.StepDependancies)
+                .HasForeignKey(sd => sd.ChildStepId)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<StepDependancy>()
+                .HasRequired(sd => sd.ParentStep)
+                .WithMany(sd => sd.StepDependants)
+                .HasForeignKey(sd => sd.ParentStepId)
+                .WillCascadeOnDelete(false);
         }
     }
 }
