@@ -17,9 +17,9 @@ namespace YesChef_DataLayer
         public DbSet<Recipe> Recipies { get; set; }
         public DbSet<Step> Steps { get; set; }
         public DbSet<StepDependancy> StepDependancies { get; set; }
-        //public DbSet<SousChef> SousChefs { get; set; }
-        //public DbSet<Meal> Meals { get; set; }
-        //public DbSet<RecipeInstance> RecipeInstances { get; set; }
+        public DbSet<SousChef> SousChefs { get; set; }
+        public DbSet<Meal> Meals { get; set; }
+        public DbSet<RecipeInstance> RecipeInstances { get; set; }
         //public DbSet<RecipeInstanceStep> RecipeInstanceSteps { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

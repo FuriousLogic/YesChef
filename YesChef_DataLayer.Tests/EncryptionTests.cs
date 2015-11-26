@@ -8,7 +8,6 @@ using NUnit.Framework;
 namespace YesChef_DataLayer.Tests
 {
     [TestFixture]
-    [Ignore]
     public class EncryptionTests
     {
         [Test]
