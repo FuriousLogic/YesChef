@@ -23,5 +23,11 @@ namespace YesChef_DataLayer
             var db = new YesChefContext();
             return db.QuantityTypes.ToList();
         }
+
+        public static QuantityType GetQuantityType(int quantityTypeId)
+        {
+            var db = new YesChefContext();
+            return db.QuantityTypes.Find(quantityTypeId);
+        }
     }
 }

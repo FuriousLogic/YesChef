@@ -1,27 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YesChef_DataLayer.DataClasses;
 
 namespace YesChef_DataLayer
 {
     public static class IngredientHandler
     {
-        public static Ingredient CreateIngredient(Recipe recipe, QuantityType quantityType, string name, int quantity)
+        public static Ingredient CreateIngredient(int recipeId, int quantityTypeId, string name, int quantity)
         {
             var db = new YesChefContext();
 
-            var ri = db.Ingredients.Add(new Ingredient {
-                Recipe = recipe,
+            var ingredient = db.Ingredients.Add(new Ingredient
+            {
+                RecipeId = recipeId,
                 Name = name,
-                QuantityType = quantityType,
+                QuantityTypeId = quantityTypeId,
                 Quantity = quantity
             });
             db.SaveChanges();
 
-            return ri;
+            return GetIngredient(ingredient.Id);
+        }
+
+        public static Ingredient GetIngredient(int ingredientId)
+        {
+            var db = new YesChefContext();
+            var ingredient = db.Ingredients
+                .Include(i=>i.QuantityType)
+                .Include(i=>i.Recipe)
+                .Single(i=>i.Id==ingredientId);
+            return ingredient;
         }
     }
 }

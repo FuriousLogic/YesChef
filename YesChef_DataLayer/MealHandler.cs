@@ -9,31 +9,31 @@ namespace YesChef_DataLayer
 {
     public class MealHandler
     {
-        public static Meal CreateMeal(string name, SousChef sousChef)
-        {
-            var db = new YesChefContext();
-            var meal = db.Meals.Add(new Meal
-            {
-                CreatedAt = DateTime.Now,
-                Name = name,
-                SousChef = sousChef
-            });
-            db.SaveChanges();
+    //    public static Meal CreateMeal(string name, SousChef sousChef)
+    //    {
+    //        var db = new YesChefContext();
+    //        var meal = db.Meals.Add(new Meal
+    //        {
+    //            CreatedAt = DateTime.Now,
+    //            Name = name,
+    //            SousChef = sousChef
+    //        });
+    //        db.SaveChanges();
 
-            return meal;
-        }
+    //        return meal;
+    //    }
 
-        public static Meal CreateMeal(string name, SousChef sousChef, Recipe recipe)
-        {
-            var meal = CreateMeal(name, sousChef);
-            RecipeInstanceHandler.CreateRecipeInstance(recipe, meal);
-            return meal; 
-        }
+    //    public static Meal CreateMeal(string name, SousChef sousChef, Recipe recipe)
+    //    {
+    //        var meal = CreateMeal(name, sousChef);
+    //        RecipeInstanceHandler.CreateRecipeInstance(recipe, meal);
+    //        return meal; 
+    //    }
 
-        public static Meal AddRecipe(Meal meal, Recipe recipe)
-        {
-            RecipeInstanceHandler.CreateRecipeInstance(recipe, meal);
-            return meal;
-        }
+    //    public static Meal AddRecipe(Meal meal, Recipe recipe)
+    //    {
+    //        RecipeInstanceHandler.CreateRecipeInstance(recipe, meal);
+    //        return meal;
+    //    }
     }
 }

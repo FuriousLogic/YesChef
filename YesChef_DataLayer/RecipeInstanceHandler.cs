@@ -9,17 +9,17 @@ namespace YesChef_DataLayer
 {
     public class RecipeInstanceHandler
     {
-        public static RecipeInstance CreateRecipeInstance(Recipe recipe, Meal meal)
-        {
-            var db = new YesChefContext();
-            var recipeInstance = db.RecipeInstances.Add(new RecipeInstance
-            {
-                Meal = meal,
-                Recipe = recipe
-            });
-            db.SaveChanges();
+        //public static RecipeInstance CreateRecipeInstance(Recipe recipe, Meal meal)
+        //{
+        //    var db = new YesChefContext();
+        //    var recipeInstance = db.RecipeInstances.Add(new RecipeInstance
+        //    {
+        //        Meal = meal,
+        //        Recipe = recipe
+        //    });
+        //    db.SaveChanges();
 
-            return recipeInstance;
-        }
+        //    return recipeInstance;
+        //}
     }
 }

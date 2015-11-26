@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,14 +25,24 @@ namespace YesChef_DataLayer
             return db.Recipies.ToList();
         }
 
-        public static int GetRecipeBusyTime(Recipe recipe)
+        public static int GetRecipeBusyTime(int recipeId)
         {
+            var recipe = GetRecipe(recipeId);
             return recipe.Steps.Where(step => !step.IsFreeTime).Sum(step => step.MinutesDuration);
         }
 
-        public static int GetRecipeFreeTime(Recipe recipe)
+        public static int GetRecipeFreeTime(int recipeId)
         {
+            var recipe = GetRecipe(recipeId);
             return recipe.Steps.Where(step => step.IsFreeTime).Sum(step => step.MinutesDuration);
+            //return recipe.Steps.Where(step => step.IsFreeTime).Sum(step => step.MinutesDuration);
+        }
+
+        public static Recipe GetRecipe(int recipeId)
+        {
+            var db = new YesChefContext();
+            var recipe = db.Recipies.Find(recipeId);
+            return recipe;
         }
     }
 }

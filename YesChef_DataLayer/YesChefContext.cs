@@ -16,33 +16,49 @@ namespace YesChef_DataLayer
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recipe> Recipies { get; set; }
         public DbSet<Step> Steps { get; set; }
-        public DbSet<StepDependancy> StepDependancies { get; set; }
-        public DbSet<SousChef> SousChefs { get; set; }
-        public DbSet<Meal> Meals { get; set; }
-        public DbSet<RecipeInstance> RecipeInstances { get; set; }
+        //public DbSet<StepDependancy> StepDependancies { get; set; }
+        //public DbSet<SousChef> SousChefs { get; set; }
+        //public DbSet<Meal> Meals { get; set; }
+        //public DbSet<RecipeInstance> RecipeInstances { get; set; }
+        //public DbSet<RecipeInstanceStep> RecipeInstanceSteps { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //Recipe
-            modelBuilder.Entity<Recipe>().Property(r => r.Name).IsRequired();
+            ////Recipe
+            //modelBuilder.Entity<Recipe>().Property(r => r.Name).IsRequired();
 
-            //Ingredient
-            modelBuilder.Entity<Ingredient>().Property(i => i.Name).IsRequired();
+            ////Ingredient
+            //modelBuilder.Entity<Ingredient>().Property(i => i.Name).IsRequired();
+            //modelBuilder.Entity<Ingredient>()
+            //    .HasRequired(i => i.Recipe)
+            //    .WithMany(r => r.Ingredients)
+            //    .HasForeignKey(i => i.RecipeId)
+            //    .WillCascadeOnDelete(true);
+            //modelBuilder.Entity<Ingredient>()
+            //    .HasRequired(i => i.QuantityType)
+            //    .WithMany(qt => qt.Ingredients)
+            //    .HasForeignKey(i => i.QuantityTypeId)
+            //    .WillCascadeOnDelete(true);
 
-            //ChildStep
-            modelBuilder.Entity<Step>().Property(i => i.Description).IsRequired();
+            ////Step
+            //modelBuilder.Entity<Step>().Property(i => i.Description).IsRequired();
+            //modelBuilder.Entity<Step>()
+            //    .HasRequired(s => s.Recipe)
+            //    .WithMany(r => r.Steps)
+            //    .HasForeignKey(s => s.RecipeId)
+            //    .WillCascadeOnDelete(true);
 
-            //Step Dependancy
-            modelBuilder.Entity<StepDependancy>()
-                .HasRequired(sd => sd.ChildStep)
-                .WithMany(sd => sd.StepDependancies)
-                .HasForeignKey(sd => sd.ChildStepId)
-                .WillCascadeOnDelete(false);
-            modelBuilder.Entity<StepDependancy>()
-                .HasRequired(sd => sd.ParentStep)
-                .WithMany(sd => sd.StepDependants)
-                .HasForeignKey(sd => sd.ParentStepId)
-                .WillCascadeOnDelete(false);
+            ////Step Dependancy
+            //modelBuilder.Entity<StepDependancy>()
+            //    .HasRequired(sd => sd.ChildStep)
+            //    .WithMany(sd => sd.StepDependancies)
+            //    .HasForeignKey(sd => sd.ChildStepId)
+            //    .WillCascadeOnDelete(false);
+            //modelBuilder.Entity<StepDependancy>()
+            //    .HasRequired(sd => sd.ParentStep)
+            //    .WithMany(sd => sd.StepDependants)
+            //    .HasForeignKey(sd => sd.ParentStepId)
+            //    .WillCascadeOnDelete(false);
         }
     }
 }

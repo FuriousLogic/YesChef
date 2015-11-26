@@ -55,6 +55,7 @@
     <Compile Include="DataClasses\QuantityType.cs" />
     <Compile Include="DataClasses\Recipe.cs" />
     <Compile Include="DataClasses\RecipeInstance.cs" />
+    <Compile Include="DataClasses\RecipeInstanceStep.cs" />
     <Compile Include="DataClasses\SousChef.cs" />
     <Compile Include="DataClasses\Step.cs" />
     <Compile Include="DataClasses\StepDependancy.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="RecipeHandler.cs" />
     <Compile Include="IngredientHandler.cs" />
     <Compile Include="RecipeInstanceHandler.cs" />
+    <Compile Include="RecipeInstanceStepHandler.cs" />
     <Compile Include="SousChefHandler.cs" />
     <Compile Include="StepDependancyHandler.cs" />
     <Compile Include="StepHandler.cs" />

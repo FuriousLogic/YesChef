@@ -57,8 +57,9 @@
     <Compile Include="MealTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityTypeTests.cs" />
+    <Compile Include="RecipeInstanceStepTests.cs" />
     <Compile Include="RecipeInstanceTests.cs" />
-    <Compile Include="RecipeItemTests.cs" />
+    <Compile Include="IngredientTests.cs" />
     <Compile Include="RecipeTests.cs" />
     <Compile Include="SousChefTests.cs" />
     <Compile Include="StepDependancyTests.cs" />

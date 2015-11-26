@@ -9,21 +9,21 @@ namespace YesChef_DataLayer
 {
     public class SousChefHandler
     {
-        public static SousChef CreateSousChef(string Name, string Email, string PlainTextPassword)
-        {
-            var db = new YesChefContext();
-            var sousChef = db.SousChefs.Add(new SousChef
-            {
-                Name = Name,
-                EmailAddress = Email,
-                PasswordHash = "spaceSaver"
-            });
-            db.SaveChanges();
+        //public static SousChef CreateSousChef(string Name, string Email, string PlainTextPassword)
+        //{
+        //    var db = new YesChefContext();
+        //    var sousChef = db.SousChefs.Add(new SousChef
+        //    {
+        //        Name = Name,
+        //        EmailAddress = Email,
+        //        PasswordHash = "spaceSaver"
+        //    });
+        //    db.SaveChanges();
 
-            sousChef.PasswordHash = EncryptionHandler.CreateHash(PlainTextPassword, sousChef.Id);
-            db.SaveChanges();
+        //    sousChef.PasswordHash = EncryptionHandler.CreateHash(PlainTextPassword, sousChef.Id);
+        //    db.SaveChanges();
 
-            return sousChef;
-        }
+        //    return sousChef;
+        //}
     }
 }

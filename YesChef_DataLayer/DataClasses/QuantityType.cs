@@ -1,8 +1,12 @@
-﻿namespace YesChef_DataLayer.DataClasses
+﻿using System.Collections.Generic;
+
+namespace YesChef_DataLayer.DataClasses
 {
-    public sealed class QuantityType
+    public class QuantityType
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
     }
 }
