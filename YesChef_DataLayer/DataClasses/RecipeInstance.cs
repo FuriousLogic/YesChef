@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +14,15 @@ namespace YesChef_DataLayer.DataClasses
             RecipeInstanceSteps = new List<RecipeInstanceStep>();
         }
         public int Id { get; set; }
-        public Recipe Recipe { get; set; }
+
+        public int MealId { get; set; }
+        [ForeignKey("MealId")]
         public Meal Meal { get; set; }
 
-        public ICollection<RecipeInstanceStep> RecipeInstanceSteps { get; set; }
+        public int RecipeId { get; set; }
+        [ForeignKey("RecipeId")]
+        public Recipe Recipe { get; set; }
+
+        public virtual ICollection<RecipeInstanceStep> RecipeInstanceSteps { get; set; }
     }
 }

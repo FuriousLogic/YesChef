@@ -13,6 +13,6 @@ namespace YesChef_DataLayer.DataClasses
         public string EmailAddress { get; set; }
         public string PasswordHash { get; set; }
 
-        public ICollection<Meal> Meals { get; set; }
+        public virtual ICollection<Meal> Meals { get; set; }
     }
 }
