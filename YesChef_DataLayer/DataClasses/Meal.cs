@@ -15,7 +15,7 @@ namespace YesChef_DataLayer.DataClasses
 
         public int SousChefId { get; set; }
         [ForeignKey("SousChefId")]
-        public SousChef SousChef { get; set; }
+        public virtual SousChef SousChef { get; set; }
 
         public virtual ICollection<RecipeInstance> RecipeInstances { get; set; }
     }

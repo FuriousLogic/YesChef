@@ -16,8 +16,8 @@ namespace YesChef_DataLayer.Tests
         {
             var sousChef = SousChefHandler.CreateSousChef($"name {Guid.NewGuid()}", "1@1.com", "password");
             var recipe = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
-            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef);
-            var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipe: recipe, meal: meal);
+            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id);
+            var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipeId: recipe.Id, mealId: meal.Id);
             Assert.That(recipeInstance, Is.Not.Null);
             Assert.That(recipeInstance.Meal.Id, Is.EqualTo(meal.Id));
             Assert.That(recipeInstance.Id, Is.GreaterThan(0));
@@ -34,8 +34,8 @@ namespace YesChef_DataLayer.Tests
             var step3 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 6, recipe.Id);
             StepDependancyHandler.CreateStepDependancy(step1.Id, step2.Id);
             StepDependancyHandler.CreateStepDependancy(step2.Id, step3.Id);
-            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef);
-            var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipe, meal);
+            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id);
+            var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipe.Id, meal.Id);
             Assert.That(sousChef, Is.Not.Null);
             Assert.That(recipe, Is.Not.Null);
             Assert.That(step1, Is.Not.Null);
@@ -43,7 +43,7 @@ namespace YesChef_DataLayer.Tests
             Assert.That(step3, Is.Not.Null);
             Assert.That(recipeInstance, Is.Not.Null);
 
-            //Check Times on recipe instance steps
+            //Check Times on recipeId instance steps
 
             Assert.Fail();
         }

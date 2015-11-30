@@ -59,6 +59,13 @@ namespace YesChef_DataLayer
                 .WithMany(sd => sd.StepDependants)
                 .HasForeignKey(sd => sd.ParentStepId)
                 .WillCascadeOnDelete(false);
+
+            //RecipeInstanceStep
+            modelBuilder.Entity<RecipeInstanceStep>()
+                .HasRequired(ris=>ris.Step)
+                .WithMany(s=>s.RecipeInstanceSteps)
+                .HasForeignKey(ris=>ris.RecipeInstanceId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

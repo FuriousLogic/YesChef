@@ -9,28 +9,27 @@ namespace YesChef_DataLayer
 {
     public class RecipeInstanceStepHandler
     {
-        public static RecipeInstanceStep CreateRecipeInstanceStep(RecipeInstance recipeInstance, Step step)
+        public static RecipeInstanceStep CreateRecipeInstanceStep(int recipeInstanceId, int stepId)
         {
             var db = new YesChefContext();
             var recipeInstanceStep = db.RecipeInstanceSteps.Add(new RecipeInstanceStep
             {
-                RecipeInstance = recipeInstance,
-                Step = step
+                RecipeInstanceId = recipeInstanceId,
+                StepId = stepId
             });
             db.SaveChanges();
 
             return recipeInstanceStep;
         }
 
-        public static RecipeInstance CreateRecipeInstanceSteps(RecipeInstance recipeInstance)
+        public static RecipeInstance CreateRecipeInstanceSteps(int recipeInstanceId)
         {
+            var recipeInstance = RecipeInstanceHandler.GetRecipeInstance(recipeInstanceId);
             foreach (var step in recipeInstance.Recipe.Steps)
             {
-                CreateRecipeInstanceStep(recipeInstance, step);
+                CreateRecipeInstanceStep(recipeInstanceId, step.Id);
             }
 
-            var db = new YesChefContext();
-            recipeInstance = db.RecipeInstances.Find(recipeInstance.Id);
             return recipeInstance;
         }
     }

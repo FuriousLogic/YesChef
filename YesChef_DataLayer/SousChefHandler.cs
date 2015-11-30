@@ -25,5 +25,12 @@ namespace YesChef_DataLayer
 
             return sousChef;
         }
+
+        public static SousChef GetSousChef(int sousChefId)
+        {
+            var db = new YesChefContext();
+            var sousChef = db.SousChefs.Find(sousChefId);
+            return sousChef;
+        }
     }
 }

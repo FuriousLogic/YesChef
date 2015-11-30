@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YesChef_DataLayer.DataClasses
 {
-    public  partial class Step
+    public partial class Step
     {
         public Step()
         {
@@ -19,9 +19,10 @@ namespace YesChef_DataLayer.DataClasses
 
         public int RecipeId { get; set; }
         [ForeignKey("RecipeId")]
-        public Recipe Recipe { get; set; }
+        public virtual Recipe Recipe { get; set; }
 
         public virtual ICollection<StepDependancy> StepDependancies { get; set; } = new List<StepDependancy>();
         public virtual ICollection<StepDependancy> StepDependants { get; set; } = new List<StepDependancy>();
+        public virtual ICollection<RecipeInstanceStep> RecipeInstanceSteps { get; set; } = new List<RecipeInstanceStep>();
     }
 }

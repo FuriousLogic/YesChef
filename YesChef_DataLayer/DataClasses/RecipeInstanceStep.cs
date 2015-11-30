@@ -16,10 +16,10 @@ namespace YesChef_DataLayer.DataClasses
 
         public int RecipeInstanceId { get; set; }
         [ForeignKey("RecipeInstanceId")]
-        public RecipeInstance RecipeInstance { get; set; }
+        public virtual RecipeInstance RecipeInstance { get; set; }
 
         public int StepId { get; set; }
-        [ForeignKey("StepId")]
-        public Step Step { get; set; }
+        //[ForeignKey("StepId")] - defined in Fluent API
+        public virtual Step Step { get; set; }
     }
 }
