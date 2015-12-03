@@ -21,5 +21,8 @@ namespace YesChef_DataLayer.DataClasses
         public int StepId { get; set; }
         //[ForeignKey("StepId")] - defined in Fluent API
         public virtual Step Step { get; set; }
+
+        [NotMapped]
+        public int MinutesBeforeRecipeEndToStart { get; set; }
     }
 }

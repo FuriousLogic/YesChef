@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using YesChef_DataLayer.DataClasses;
 
 namespace YesChef_DataLayer.Tests
 {
@@ -16,11 +11,15 @@ namespace YesChef_DataLayer.Tests
         {
             var sousChef = SousChefHandler.CreateSousChef($"name {Guid.NewGuid()}", "1@1.com", "password");
             var recipe = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
+            StepHandler.CreateStep($"desc {Guid.NewGuid()}", 1, recipe.Id);
+            StepHandler.CreateStep($"desc {Guid.NewGuid()}", 1, recipe.Id);
             var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id);
             var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipeId: recipe.Id, mealId: meal.Id);
+
             Assert.That(recipeInstance, Is.Not.Null);
             Assert.That(recipeInstance.Meal.Id, Is.EqualTo(meal.Id));
             Assert.That(recipeInstance.Id, Is.GreaterThan(0));
+            Assert.That(recipeInstance.RecipeInstanceSteps.Count,Is.EqualTo(2));
         }
 
         [Test]
@@ -43,9 +42,8 @@ namespace YesChef_DataLayer.Tests
             Assert.That(step3, Is.Not.Null);
             Assert.That(recipeInstance, Is.Not.Null);
 
-            //Check Times on recipeId instance steps
-
-            Assert.Fail();
+            var minutesToFinish = RecipeInstanceHandler.GetMinutesToFinish(recipeInstance.Id);
+            Assert.That(minutesToFinish,Is.EqualTo(15));
         }
     }
 }

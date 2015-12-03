@@ -37,7 +37,6 @@ namespace YesChef_DataLayer.Tests
             var sousChef = SousChefHandler.CreateSousChef($"name {Guid.NewGuid()}", "1@1.com", "password");
             var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id, recipe.Id);
             var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipe.Id, meal.Id);
-            recipeInstance = RecipeInstanceStepHandler.CreateRecipeInstanceSteps(recipeInstance.Id);
             Assert.That(recipeInstance, Is.Not.Null);
             Assert.That(recipeInstance.Id, Is.GreaterThan(0));
             Assert.That(recipeInstance.RecipeInstanceSteps.Count, Is.EqualTo(3));

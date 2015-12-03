@@ -64,7 +64,7 @@ namespace YesChef_DataLayer
             modelBuilder.Entity<RecipeInstanceStep>()
                 .HasRequired(ris=>ris.Step)
                 .WithMany(s=>s.RecipeInstanceSteps)
-                .HasForeignKey(ris=>ris.RecipeInstanceId)
+                .HasForeignKey(s=>s.StepId)
                 .WillCascadeOnDelete(false);
         }
     }
