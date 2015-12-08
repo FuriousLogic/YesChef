@@ -12,6 +12,7 @@ namespace YesChef_DataLayer.DataClasses
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Name { get; set; }
+        public bool IsCompleted { get; set; }
 
         public int SousChefId { get; set; }
         [ForeignKey("SousChefId")]

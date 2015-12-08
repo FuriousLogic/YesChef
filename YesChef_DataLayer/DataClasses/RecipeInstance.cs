@@ -10,6 +10,7 @@ namespace YesChef_DataLayer.DataClasses
     public class RecipeInstance
     {
         public int Id { get; set; }
+        public bool IsCompleted { get; set; } = false;
 
         public int MealId { get; set; }
         [ForeignKey("MealId")]

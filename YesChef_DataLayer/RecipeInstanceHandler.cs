@@ -42,14 +42,14 @@ namespace YesChef_DataLayer
             return recipeInstance;
         }
 
-        private static void FillTimings(ICollection<RecipeInstanceStep> recipeInstanceSteps)
+        private static void FillTimings(ICollection<RecipeInstanceStep> uncompletedRecipeInstanceSteps)
         {
             while (true)
             {
                 //Get number of unscheduled steps
-                var unscheduledCount = (from ris in recipeInstanceSteps where ris.MinutesBeforeRecipeEndToStart==0 select ris).ToList().Count;
+                var unscheduledCount = (from ris in uncompletedRecipeInstanceSteps where ris.MinutesBeforeRecipeEndToStart == 0 select ris).ToList().Count;
 
-                foreach (var recipeInstanceStep in recipeInstanceSteps)
+                foreach (var recipeInstanceStep in uncompletedRecipeInstanceSteps)
                 {
                     //Is it scheduled already?
                     if (recipeInstanceStep.MinutesBeforeRecipeEndToStart > 0) continue;
@@ -66,7 +66,7 @@ namespace YesChef_DataLayer
                     var maxMinutesStartForChild = 0;
                     foreach (var childStep in childSteps)
                     {
-                        var instanceStep = recipeInstanceSteps.Single(ris => ris.StepId == childStep.Id);
+                        var instanceStep = uncompletedRecipeInstanceSteps.Single(ris => ris.StepId == childStep.Id);
                         if (instanceStep.MinutesBeforeRecipeEndToStart > 0)
                         {
                             if (instanceStep.MinutesBeforeRecipeEndToStart > maxMinutesStartForChild)
@@ -79,12 +79,12 @@ namespace YesChef_DataLayer
                 }
 
                 //All Done?
-                var instanceStepsNotScheduled = (from ris in recipeInstanceSteps where ris.MinutesBeforeRecipeEndToStart<=0 select ris).ToList();
-                if(instanceStepsNotScheduled.Count==0)
+                var instanceStepsNotScheduled = (from ris in uncompletedRecipeInstanceSteps where ris.MinutesBeforeRecipeEndToStart <= 0 select ris).ToList();
+                if (instanceStepsNotScheduled.Count == 0)
                     break;
 
                 //Check number of unscheduled steps
-                if( unscheduledCount <= (from ris in recipeInstanceSteps where ris.MinutesBeforeRecipeEndToStart == 0 select ris).ToList().Count)
+                if (unscheduledCount <= (from ris in uncompletedRecipeInstanceSteps where ris.MinutesBeforeRecipeEndToStart == 0 select ris).ToList().Count)
                     throw new Exception("Scheduling Error");
 
 
@@ -95,15 +95,52 @@ namespace YesChef_DataLayer
         {
             //Find all end points for recipe steps
             var recipeInstance = GetRecipeInstance(recipeInstanceId);
-            var recipeInstanceSteps = recipeInstance.RecipeInstanceSteps;
+            var recipeInstanceSteps = recipeInstance.RecipeInstanceSteps.Where(ris => ris.Finished == null).ToList();
             FillTimings(recipeInstanceSteps);
 
-            var longestTime = recipeInstanceSteps.Max(x=>x.MinutesBeforeRecipeEndToStart);
+            var longestTime = recipeInstanceSteps.Max(x => x.MinutesBeforeRecipeEndToStart);
 
             return longestTime;
         }
 
 
+        public static RecipeInstanceStep YesChef(int recipeInstanceId, int stepId)
+        {
+            var db = new YesChefContext();
+            var recipeInstanceStep = (from ris in db.RecipeInstanceSteps where ris.RecipeInstanceId == recipeInstanceId && ris.StepId == stepId select ris).FirstOrDefault();
+            if (recipeInstanceStep == null) throw new Exception("Cannot find recipeInstanceStep");
 
+            recipeInstanceStep.Started = DateTime.Now;
+            db.SaveChanges();
+
+            return recipeInstanceStep;
+        }
+
+        public static RecipeInstanceStep FinishedChef(int recipeInstanceId, int stepId)
+        {
+            var db = new YesChefContext();
+            var recipeInstanceStep = (from ris in db.RecipeInstanceSteps where ris.RecipeInstanceId == recipeInstanceId && ris.StepId == stepId select ris).FirstOrDefault();
+            if (recipeInstanceStep == null) throw new Exception("Cannot find recipeInstanceStep");
+
+            //Make sure it's started
+            if (recipeInstanceStep.Started == null)
+                throw new Exception("Step not yet started!");
+
+            recipeInstanceStep.Finished = DateTime.Now;
+
+            //can the recipe be marked as completed?
+            var uncompletedRecipeInstanceSteps = (from ris in recipeInstanceStep.RecipeInstance.RecipeInstanceSteps where ris.Finished==null select ris).ToList();
+            if (uncompletedRecipeInstanceSteps.Count == 0)
+                recipeInstanceStep.RecipeInstance.IsCompleted = true;
+
+            //can the meal be marked as completed?
+            var uncompletedRecipeInstances = (from x in recipeInstanceStep.RecipeInstance.Meal.RecipeInstances where !x.IsCompleted select x).ToList();
+            if (uncompletedRecipeInstances.Count == 0)
+                recipeInstanceStep.RecipeInstance.Meal.IsCompleted = true;
+
+            db.SaveChanges();
+
+            return recipeInstanceStep;
+        }
     }
 }

@@ -42,5 +42,18 @@ namespace YesChef_DataLayer
             var meal = db.Meals.Single(m => m.Id == mealId);
             return meal;
         }
+
+        public static int GetMinutesToFinish(int mealId)
+        {
+            var meal = GetMeal(mealId);
+            var currentLongest = 0;
+            foreach (var recipeInstance in meal.RecipeInstances)
+            {
+                var minutesToFinish = RecipeInstanceHandler.GetMinutesToFinish(recipeInstance.Id);
+                if (minutesToFinish > currentLongest) currentLongest = minutesToFinish;
+            }
+
+            return currentLongest;
+        }
     }
 }
