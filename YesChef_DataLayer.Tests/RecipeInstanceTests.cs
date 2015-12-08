@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using NUnit.Framework;
 using YesChef_DataLayer.DataClasses;
 
@@ -20,7 +21,7 @@ namespace YesChef_DataLayer.Tests
             Assert.That(recipeInstance, Is.Not.Null);
             Assert.That(recipeInstance.Meal.Id, Is.EqualTo(meal.Id));
             Assert.That(recipeInstance.Id, Is.GreaterThan(0));
-            Assert.That(recipeInstance.RecipeInstanceSteps.Count,Is.EqualTo(2));
+            Assert.That(recipeInstance.RecipeInstanceSteps.Count, Is.EqualTo(2));
         }
 
         [Test]
@@ -59,7 +60,7 @@ namespace YesChef_DataLayer.Tests
             StepDependancyHandler.CreateStepDependancy(step1.Id, step2.Id);
             StepDependancyHandler.CreateStepDependancy(step2.Id, step3.Id);
 
-            var recipe2= RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
+            var recipe2 = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
             var step4 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 6, recipe2.Id);
             var step5 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 5, recipe2.Id);
             var step6 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 7, recipe2.Id);
@@ -154,7 +155,7 @@ namespace YesChef_DataLayer.Tests
             var recipeInstanceStep = RecipeInstanceHandler.YesChef(recipeInstance.Id, step1.Id);
 
             Assert.That(recipeInstanceStep.StepId, Is.EqualTo(step1.Id));
-            Assert.That(recipeInstanceStep.Started,Is.Not.Null);
+            Assert.That(recipeInstanceStep.Started, Is.Not.Null);
         }
         [Test]
         public void ShouldRecalculateRecipeTimeAfterStepCompletion()
@@ -177,7 +178,7 @@ namespace YesChef_DataLayer.Tests
             Assert.That(recipeInstance, Is.Not.Null);
 
             var recipeInstanceStep = RecipeInstanceHandler.YesChef(recipeInstance.Id, step1.Id);
-            Assert.That(recipeInstanceStep.StepId,Is.EqualTo(step1.Id));
+            Assert.That(recipeInstanceStep.StepId, Is.EqualTo(step1.Id));
             Assert.That(recipeInstanceStep.Started, Is.Not.Null);
 
             recipeInstanceStep = RecipeInstanceHandler.FinishedChef(recipeInstance.Id, step1.Id);
@@ -202,7 +203,7 @@ namespace YesChef_DataLayer.Tests
             Assert.That(step1, Is.Not.Null);
             Assert.That(recipeInstance, Is.Not.Null);
 
-            Assert.That(()=> RecipeInstanceHandler.FinishedChef(recipeInstance.Id, step1.Id), Throws.Exception);
+            Assert.That(() => RecipeInstanceHandler.FinishedChef(recipeInstance.Id, step1.Id), Throws.Exception);
         }
 
         [Test]
@@ -234,7 +235,7 @@ namespace YesChef_DataLayer.Tests
 
             //Check value is still false
             recipeInstance = RecipeInstanceHandler.GetRecipeInstance(recipeInstance.Id);
-            Assert.That(recipeInstance.IsCompleted,Is.False);
+            Assert.That(recipeInstance.IsCompleted, Is.False);
 
             //Finish recipe
             RecipeInstanceHandler.FinishedChef(recipeInstance.Id, step3.Id);
@@ -243,11 +244,52 @@ namespace YesChef_DataLayer.Tests
             recipeInstance = RecipeInstanceHandler.GetRecipeInstance(recipeInstance.Id);
             Assert.That(recipeInstance.IsCompleted, Is.True);
         }
+
         [Test]
-        public void ShouldPresentCorrectStepInSeriesRecipe() { Assert.Fail(); }
+        public void ShouldPresentCorrectStepInSeriesRecipe()
+        {
+            //Setup
+            var sousChef = SousChefHandler.CreateSousChef($"name {Guid.NewGuid()}", "1@1.com", "password");
+            var recipe = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
+            var step1 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 4, recipe.Id);
+            var step2 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 5, recipe.Id);
+            var step3 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 6, recipe.Id);
+            StepDependancyHandler.CreateStepDependancy(step1.Id, step2.Id);
+            StepDependancyHandler.CreateStepDependancy(step2.Id, step3.Id);
+            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id);
+            var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipe.Id, meal.Id);
+
+            var recipeInstanceSteps = RecipeInstanceHandler.GetNextSteps(recipeInstance.Id);
+            Assert.That(recipeInstanceSteps.Count, Is.EqualTo(1));
+            Assert.That(recipeInstanceSteps[0].StepId, Is.EqualTo(step1.Id));
+        }
         [Test]
-        public void ShouldPresentCorrectStepInMultiPathRecipe() { Assert.Fail(); }
+        public void ShouldPresentCorrectStepInMultiPathRecipe()
+        {   
+            //Setup
+            var sousChef = SousChefHandler.CreateSousChef($"name {Guid.NewGuid()}", "1@1.com", "password");
+            var recipe = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
+            var step1 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 4, recipe.Id);
+            var step2 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 5, recipe.Id);
+            var step3 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 6, recipe.Id);
+            var step4 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 7, recipe.Id);
+            StepDependancyHandler.CreateStepDependancy(step1.Id, step2.Id);
+            StepDependancyHandler.CreateStepDependancy(step3.Id, step4.Id);
+            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id);
+            var recipeInstance = RecipeInstanceHandler.CreateRecipeInstance(recipe.Id, meal.Id);
+
+            var recipeInstanceSteps = RecipeInstanceHandler.GetNextSteps(recipeInstance.Id);
+            Assert.That(recipeInstanceSteps.Count, Is.EqualTo(2));
+            Assert.That(recipeInstanceSteps, Has.Exactly(1).Property("StepId").EqualTo(step1.Id));
+            Assert.That(recipeInstanceSteps, Has.Exactly(1).Property("StepId").EqualTo(step3.Id));
+        }
         [Test]
-        public void ShouldPresentCorrectStepInMultiRecipeMeal() { Assert.Fail(); }
+        public void ShouldPresentCorrectStepInSeriesRecipeAfterYesChef() { Assert.Fail(); }
+        [Test]
+        public void ShouldPresentCorrectStepInSeriesRecipeAfterFinishedChef() { Assert.Fail(); }
+        [Test]
+        public void ShouldGiveCorrectTimeForHybridRecipe() { Assert.Fail(); }
+        [Test]
+        public void ShouldPresentCorrectStepsForHybridRecipe() { Assert.Fail(); }
     }
 }

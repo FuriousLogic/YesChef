@@ -129,7 +129,7 @@ namespace YesChef_DataLayer
             recipeInstanceStep.Finished = DateTime.Now;
 
             //can the recipe be marked as completed?
-            var uncompletedRecipeInstanceSteps = (from ris in recipeInstanceStep.RecipeInstance.RecipeInstanceSteps where ris.Finished==null select ris).ToList();
+            var uncompletedRecipeInstanceSteps = (from ris in recipeInstanceStep.RecipeInstance.RecipeInstanceSteps where ris.Finished == null select ris).ToList();
             if (uncompletedRecipeInstanceSteps.Count == 0)
                 recipeInstanceStep.RecipeInstance.IsCompleted = true;
 
@@ -141,6 +141,19 @@ namespace YesChef_DataLayer
             db.SaveChanges();
 
             return recipeInstanceStep;
+        }
+
+        public static List<RecipeInstanceStep> GetNextSteps(int recipeInstanceId)
+        {
+            var rv =new List<RecipeInstanceStep>();
+            var recipeInstance = GetRecipeInstance(recipeInstanceId);
+            foreach (var recipeInstanceStep in recipeInstance.RecipeInstanceSteps)
+            {
+                if (recipeInstanceStep.Step.StepDependancies.Count == 0)
+                    rv.Add(recipeInstanceStep);
+            }
+
+            return rv;
         }
     }
 }

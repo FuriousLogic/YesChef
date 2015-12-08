@@ -55,5 +55,15 @@ namespace YesChef_DataLayer
 
             return currentLongest;
         }
+
+        public static List<RecipeInstanceStep> GetNextSteps(int mealId)
+        {
+            var meal = GetMeal(mealId);
+            var rv = new List<RecipeInstanceStep>();
+            foreach (var recipeInstance in meal.RecipeInstances)
+                rv.AddRange(RecipeInstanceHandler.GetNextSteps(recipeInstance.Id));
+
+            return rv;
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using YesChef_DataLayer.DataClasses;
 
 namespace YesChef_DataLayer.Tests
 {
@@ -104,6 +106,36 @@ namespace YesChef_DataLayer.Tests
             //Ensure that meal is marked as completed
             meal = MealHandler.GetMeal(meal.Id);
             Assert.That(meal.IsCompleted, Is.True);
+        }
+
+        [Test]
+        public void ShouldPresentCorrectStepsForMultiRecipeMeal()
+        {
+            //Setup
+            var sousChef = SousChefHandler.CreateSousChef($"name {Guid.NewGuid()}", "1@1.com", "password");
+
+            var recipe1 = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
+            var step1 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 4, recipe1.Id);
+            var step2 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 5, recipe1.Id);
+            var step3 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 6, recipe1.Id);
+            StepDependancyHandler.CreateStepDependancy(step1.Id, step2.Id);
+            StepDependancyHandler.CreateStepDependancy(step2.Id, step3.Id);
+
+            var recipe2 = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");
+            var step4 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 6, recipe2.Id);
+            var step5 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 5, recipe2.Id);
+            var step6 = StepHandler.CreateStep($"description {Guid.NewGuid()}", 7, recipe2.Id);
+            StepDependancyHandler.CreateStepDependancy(step4.Id, step5.Id);
+            StepDependancyHandler.CreateStepDependancy(step5.Id, step6.Id);
+
+            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id);
+            RecipeInstanceHandler.CreateRecipeInstance(recipe1.Id, meal.Id);
+            RecipeInstanceHandler.CreateRecipeInstance(recipe2.Id, meal.Id);
+
+            var recipeInstanceSteps = MealHandler.GetNextSteps(meal.Id);
+            Assert.That(recipeInstanceSteps.Count,Is.EqualTo(2));
+            Assert.That(recipeInstanceSteps, Has.Exactly(1).Property("StepId").EqualTo(step1.Id));
+            Assert.That(recipeInstanceSteps, Has.Exactly(1).Property("StepId").EqualTo(step4.Id));
         }
     }
 }
