@@ -145,12 +145,25 @@ namespace YesChef_DataLayer
 
         public static List<RecipeInstanceStep> GetNextSteps(int recipeInstanceId)
         {
-            var rv =new List<RecipeInstanceStep>();
+            var rv = new List<RecipeInstanceStep>();
             var recipeInstance = GetRecipeInstance(recipeInstanceId);
-            foreach (var recipeInstanceStep in recipeInstance.RecipeInstanceSteps)
+            foreach (var recipeInstanceStep in recipeInstance.RecipeInstanceSteps.Where(ris => ris.Finished == null).ToList())
             {
+                //If first in line
                 if (recipeInstanceStep.Step.StepDependancies.Count == 0)
+                {
                     rv.Add(recipeInstanceStep);
+                    continue;
+                }
+
+                //If all immediately previous steps are finished
+                var allFinished = true;
+                foreach (var stepDependancy in recipeInstanceStep.Step.StepDependancies)
+                {
+                    var instanceStep = recipeInstance.RecipeInstanceSteps.Single(ris=>ris.StepId==stepDependancy.ParentStepId);
+                    if (instanceStep.Finished == null) allFinished = false;
+                }
+                if(allFinished)rv.Add(recipeInstanceStep);
             }
 
             return rv;
