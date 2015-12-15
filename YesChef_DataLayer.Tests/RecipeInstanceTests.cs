@@ -360,7 +360,33 @@ namespace YesChef_DataLayer.Tests
 
             Assert.That(minutesToFinish,Is.EqualTo(12));
         }
+
         [Test]
-        public void ShouldPresentCorrectStepsForHybridRecipe() { Assert.Fail(); }
+        public void ShouldPresentCorrectStepsForHybridRecipe()
+        {
+            //Create Recipe1
+            var parentRecipe = RecipeHandler.CreateRecipe($"Parent {Guid.NewGuid()}");
+            var stepP1 = StepHandler.CreateStep($"P1 {Guid.NewGuid()}", 5, parentRecipe.Id);
+            var stepP2 = StepHandler.CreateStep($"P2 {Guid.NewGuid()}", 3, parentRecipe.Id);
+            StepDependancyHandler.CreateStepDependancy(stepP1.Id, stepP2.Id);
+
+            //Create Recipe2
+            var childRecipe = RecipeHandler.CreateRecipe($"Child {Guid.NewGuid()}");
+            var stepC1 = StepHandler.CreateStep($"C1 {Guid.NewGuid()}", 3, childRecipe.Id);
+            var stepC2 = StepHandler.CreateStep($"C2 {Guid.NewGuid()}", 4, childRecipe.Id);
+            StepDependancyHandler.CreateStepDependancy(stepC1.Id, stepC2.Id);
+
+            //Make a step4 dependant on recipe1
+            StepRecipeDependancyHandler.CreateStepRecipeDependancy(stepC2.Id, parentRecipe.Id);
+
+            //Create Meal Based on Recipe2
+            var sousChef = SousChefHandler.CreateSousChef($"Name {Guid.NewGuid()}", "1@1.com", "password");
+            var meal = MealHandler.CreateMeal($"Name {Guid.NewGuid()}", sousChef.Id, childRecipe.Id);
+
+            var recipeInstanceSteps = MealHandler.GetNextSteps(meal.Id);
+            Assert.That(recipeInstanceSteps.Count,Is.EqualTo(2));
+            Assert.That(recipeInstanceSteps, Has.Exactly(1).Property("StepId").EqualTo(stepC1.Id));
+            Assert.That(recipeInstanceSteps, Has.Exactly(1).Property("StepId").EqualTo(stepP1.Id));
+        }
     }
 }
