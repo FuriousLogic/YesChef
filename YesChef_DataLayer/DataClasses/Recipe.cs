@@ -9,5 +9,6 @@ namespace YesChef_DataLayer.DataClasses
 
         public virtual ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public virtual ICollection<Step> Steps { get; set; } = new List<Step>();
+        public virtual ICollection<StepRecipeDependancy> StepRecipeDependancies { get; set; } = new List<StepRecipeDependancy>();
     }
 }

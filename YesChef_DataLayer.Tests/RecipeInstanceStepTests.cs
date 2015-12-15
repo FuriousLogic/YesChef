@@ -12,6 +12,67 @@ namespace YesChef_DataLayer.Tests
     internal class RecipeInstanceStepTests
     {
         [Test]
+        public void ShouldGetRecipeInstanceStep()
+        {
+            var sousChef = SousChefHandler.CreateSousChef($"Name {Guid.NewGuid()}", "1@1.com", "password");
+            var recipe = RecipeHandler.CreateRecipe($"Recipe name {Guid.NewGuid()}");
+            var step = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 0, recipe.Id);
+            var meal = MealHandler.CreateMeal($"name {Guid.NewGuid()}", sousChef.Id, recipe.Id);
+
+            var recipeInstance = meal.RecipeInstances.Single(ri=>ri.RecipeId==recipe.Id);
+            var recipeInstanceStep = recipeInstance.RecipeInstanceSteps.FirstOrDefault();
+            Assert.That(recipeInstanceStep,Is.Not.Null);
+
+            var instanceStep = RecipeInstanceStepHandler.GetRecipeInstanceStep(recipeInstanceStep.Id);
+            Assert.That(instanceStep, Is.Not.Null);
+            Assert.That(recipeInstanceStep.Id,Is.EqualTo(instanceStep.Id));
+            Assert.That(recipeInstanceStep.Step, Is.Not.Null);
+            Assert.That(recipeInstanceStep.RecipeInstance, Is.Not.Null);
+        }
+
+        [Test]
+        public void ShouldGetChildSteps()
+        {
+            var recipe = RecipeHandler.CreateRecipe($"Recipe name {Guid.NewGuid()}");
+            var step = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 0, recipe.Id);
+            var childStep1 = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 0, recipe.Id);
+            var childStep2 = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 0, recipe.Id);
+            Assert.That(recipe, !Is.Null);
+            Assert.That(step, !Is.Null);
+            Assert.That(childStep1, !Is.Null);
+            Assert.That(childStep2, !Is.Null);
+
+            var stepDependancy1 = StepDependancyHandler.CreateStepDependancy(step.Id, childStep1.Id);
+            var stepDependancy2 = StepDependancyHandler.CreateStepDependancy(step.Id, childStep2.Id);
+            Assert.That(stepDependancy1, !Is.Null);
+            Assert.That(stepDependancy2, !Is.Null);
+
+            Assert.That(StepHandler.GetChildSteps(step.Id).Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void ShouldGetParentSteps()
+        {
+            var recipe = RecipeHandler.CreateRecipe($"Recipe name {Guid.NewGuid()}");
+            var step = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 0, recipe.Id);
+            var parentStep1 = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 0, recipe.Id);
+            var parentStep2 = StepHandler.CreateStep($"step description {Guid.NewGuid()}", 0, recipe.Id);
+            Assert.That(recipe, !Is.Null);
+            Assert.That(step, !Is.Null);
+            Assert.That(parentStep1, !Is.Null);
+            Assert.That(parentStep2, !Is.Null);
+
+            var stepDependancy1 = StepDependancyHandler.CreateStepDependancy(parentStep1.Id, step.Id);
+            var stepDependancy2 = StepDependancyHandler.CreateStepDependancy(parentStep2.Id, step.Id);
+            Assert.That(stepDependancy1, !Is.Null);
+            Assert.That(stepDependancy2, !Is.Null);
+
+            Assert.That(StepHandler.GetChildSteps(parentStep1.Id).Count, Is.EqualTo(1));
+            Assert.That(StepHandler.GetChildSteps(parentStep2.Id).Count, Is.EqualTo(1));
+            Assert.That(StepHandler.GetParentSteps(step.Id).Count, Is.EqualTo(2));
+        }
+
+        [Test]
         public void ShouldCreateRecipeInstanceStep()
         {
             var recipe = RecipeHandler.CreateRecipe($"name {Guid.NewGuid()}");

@@ -21,8 +21,9 @@ namespace YesChef_DataLayer.DataClasses
         [ForeignKey("RecipeId")]
         public virtual Recipe Recipe { get; set; }
 
-        public virtual ICollection<StepDependancy> StepDependancies { get; set; } = new List<StepDependancy>();
-        public virtual ICollection<StepDependancy> StepDependants { get; set; } = new List<StepDependancy>();
+        public virtual ICollection<StepDependancy> ParentStepDependancies { get; set; } = new List<StepDependancy>();
+        public virtual ICollection<StepDependancy> ChildStepDependancies { get; set; } = new List<StepDependancy>();
         public virtual ICollection<RecipeInstanceStep> RecipeInstanceSteps { get; set; } = new List<RecipeInstanceStep>();
+        public virtual ICollection<StepRecipeDependancy> StepRecipeDependancies { get; set; } = new List<StepRecipeDependancy>();
     }
 }

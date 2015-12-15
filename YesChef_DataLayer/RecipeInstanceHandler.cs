@@ -8,7 +8,7 @@ using YesChef_DataLayer.DataClasses;
 
 namespace YesChef_DataLayer
 {
-    public class RecipeInstanceHandler
+    public static class RecipeInstanceHandler
     {
         public static RecipeInstance CreateRecipeInstance(int recipeId, int mealId)
         {
@@ -19,6 +19,7 @@ namespace YesChef_DataLayer
                 RecipeId = recipeId
             });
 
+            //Add steps from recipe
             var recipe = RecipeHandler.GetRecipe(recipeId);
             foreach (var step in recipe.Steps)
             {
@@ -26,6 +27,19 @@ namespace YesChef_DataLayer
                 {
                     StepId = step.Id
                 });
+
+                //Add steps from connected recipies
+                var parentRecipe = (from x in db.StepRecipeDependancies where x.StepId==step.Id select x.Recipe).SingleOrDefault();
+                if (parentRecipe != null)
+                {
+                    foreach (var parentRecipeStep in parentRecipe.Steps)
+                    {
+                        recipeInstance.RecipeInstanceSteps.Add(new RecipeInstanceStep()
+                        {
+                            StepId = parentRecipeStep.Id
+                        });
+                    }
+                }
             }
 
             db.SaveChanges();
@@ -51,12 +65,16 @@ namespace YesChef_DataLayer
 
                 foreach (var recipeInstanceStep in uncompletedRecipeInstanceSteps)
                 {
+                    //todo:
+                    //***NEEDS TO RECOGNISE STEP-RECIPE LINK***
+                    //*** alter GetChildSteps! Needs to recognise final step may go to other recipe
+
                     //Is it scheduled already?
                     if (recipeInstanceStep.MinutesBeforeRecipeEndToStart > 0) continue;
 
-                    //Is it an unscheduled terminator step?
-                    var childSteps = StepHandler.GetChildSteps(recipeInstanceStep.StepId);
-                    if (childSteps.Count == 0)
+                    //Is it a terminator step and not a parent recipe?
+                    var childSteps = StepHandler.GetChildSteps(recipeInstanceStep.Id);
+                    if (childSteps.Count == 0 && recipeInstanceStep.Step.Recipe.StepRecipeDependancies.Count==0)
                     {
                         recipeInstanceStep.MinutesBeforeRecipeEndToStart = recipeInstanceStep.Step.MinutesDuration;
                         continue;
@@ -86,7 +104,6 @@ namespace YesChef_DataLayer
                 //Check number of unscheduled steps
                 if (unscheduledCount <= (from ris in uncompletedRecipeInstanceSteps where ris.MinutesBeforeRecipeEndToStart == 0 select ris).ToList().Count)
                     throw new Exception("Scheduling Error");
-
 
             }
         }
@@ -150,7 +167,7 @@ namespace YesChef_DataLayer
             foreach (var recipeInstanceStep in recipeInstance.RecipeInstanceSteps.Where(ris => ris.Finished == null).ToList())
             {
                 //If first in line
-                if (recipeInstanceStep.Step.StepDependancies.Count == 0)
+                if (recipeInstanceStep.Step.ParentStepDependancies.Count == 0)
                 {
                     rv.Add(recipeInstanceStep);
                     continue;
@@ -158,7 +175,7 @@ namespace YesChef_DataLayer
 
                 //If all immediately previous steps are finished
                 var allFinished = true;
-                foreach (var stepDependancy in recipeInstanceStep.Step.StepDependancies)
+                foreach (var stepDependancy in recipeInstanceStep.Step.ParentStepDependancies)
                 {
                     var instanceStep = recipeInstance.RecipeInstanceSteps.Single(ris=>ris.StepId==stepDependancy.ParentStepId);
                     if (instanceStep.Finished == null) allFinished = false;

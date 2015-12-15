@@ -59,6 +59,7 @@
     <Compile Include="DataClasses\SousChef.cs" />
     <Compile Include="DataClasses\Step.cs" />
     <Compile Include="DataClasses\StepDependancy.cs" />
+    <Compile Include="DataClasses\StepRecipeDependancy.cs" />
     <Compile Include="EncryptionHandler.cs" />
     <Compile Include="MealHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="SousChefHandler.cs" />
     <Compile Include="StepDependancyHandler.cs" />
     <Compile Include="StepHandler.cs" />
+    <Compile Include="StepRecipeDependancyHandler.cs" />
     <Compile Include="YesChefContext.cs" />
   </ItemGroup>
   <ItemGroup>

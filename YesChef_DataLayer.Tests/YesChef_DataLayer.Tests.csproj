@@ -63,6 +63,7 @@
     <Compile Include="RecipeTests.cs" />
     <Compile Include="SousChefTests.cs" />
     <Compile Include="StepDependancyTests.cs" />
+    <Compile Include="StepRecipeDependancyTests.cs" />
     <Compile Include="StepTests.cs" />
   </ItemGroup>
   <ItemGroup>

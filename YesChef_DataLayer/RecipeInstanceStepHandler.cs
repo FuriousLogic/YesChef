@@ -32,5 +32,11 @@ namespace YesChef_DataLayer
 
             return recipeInstance;
         }
+
+        public static RecipeInstanceStep GetRecipeInstanceStep(int recipeInstanceStepId)
+        {
+            var db = new YesChefContext();
+            return db.RecipeInstanceSteps.Find(recipeInstanceStepId);
+        }
     }
 }

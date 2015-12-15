@@ -35,7 +35,7 @@ namespace YesChef_DataLayer
         {
             var recipe = GetRecipe(recipeId);
             return recipe.Steps.Where(step => step.IsFreeTime).Sum(step => step.MinutesDuration);
-            //return recipe.Steps.Where(step => step.IsFreeTime).Sum(step => step.MinutesDuration);
+            //return recipe.StepRecipeDependancies.Where(step => step.IsFreeTime).Sum(step => step.MinutesDuration);
         }
 
         public static Recipe GetRecipe(int recipeId)
