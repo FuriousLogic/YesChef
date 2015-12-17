@@ -50,10 +50,10 @@ namespace YesChef_DataLayer
                 if (recipeInstanceStep.RecipeInstance.RecipeId != recipeInstanceStep.Step.RecipeId)
                 {
                     var recipeDependancy = (from srd in db.StepRecipeDependancies
-                                            where srd.RecipeId== recipeInstanceStep.Step.RecipeId 
-                                            && srd.DependantStep.RecipeId== recipeInstanceStep.RecipeInstance.RecipeId
+                                            where srd.RecipeId == recipeInstanceStep.Step.RecipeId
+                                            && srd.DependantStep.RecipeId == recipeInstanceStep.RecipeInstance.RecipeId
                                             select srd).SingleOrDefault();
-                    if(recipeDependancy!=null)
+                    if (recipeDependancy != null)
                         steps.Add(recipeDependancy.DependantStep);
                 }
             }
@@ -65,7 +65,19 @@ namespace YesChef_DataLayer
         {
             var recipeInstanceStep = RecipeInstanceStepHandler.GetRecipeInstanceStep(recipeInstanceStepId);
             var db = new YesChefContext();
-            return (from sd in db.StepDependancies where sd.ChildStepId == recipeInstanceStep.Step.Id select sd.ParentStep).ToList();
+            var parentSteps = (from sd in db.StepDependancies where sd.ChildStepId == recipeInstanceStep.Step.Id select sd.ParentStep).ToList();
+
+            //Any parent recipies?
+            var stepRecipeDependancies =
+                (from srd in db.StepRecipeDependancies where srd.StepId == recipeInstanceStep.StepId select srd).ToList();
+            if (stepRecipeDependancies.Count > 1) throw new Exception("Can have only 1 or 0 parent recipe dependancies per step");
+            if (stepRecipeDependancies.Count == 1)
+            {
+                //Get terminating steps
+                parentSteps.AddRange((from s in stepRecipeDependancies[0].Recipe.Steps where s.ChildStepDependancies.Count == 0 select s).ToList());
+            }
+
+            return parentSteps;
         }
     }
 }

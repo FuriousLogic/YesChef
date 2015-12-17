@@ -121,10 +121,10 @@ namespace YesChef_DataLayer
         }
 
 
-        public static RecipeInstanceStep YesChef(int recipeInstanceId, int stepId)
+        public static RecipeInstanceStep YesChef(int recipeInstanceStepId)
         {
             var db = new YesChefContext();
-            var recipeInstanceStep = (from ris in db.RecipeInstanceSteps where ris.RecipeInstanceId == recipeInstanceId && ris.StepId == stepId select ris).FirstOrDefault();
+            var recipeInstanceStep = RecipeInstanceStepHandler.GetRecipeInstanceStep(recipeInstanceStepId, db);
             if (recipeInstanceStep == null) throw new Exception("Cannot find recipeInstanceStep");
 
             recipeInstanceStep.Started = DateTime.Now;
@@ -133,10 +133,10 @@ namespace YesChef_DataLayer
             return recipeInstanceStep;
         }
 
-        public static RecipeInstanceStep FinishedChef(int recipeInstanceId, int stepId)
+        public static RecipeInstanceStep FinishedChef(int recipeInstanceStepId)
         {
             var db = new YesChefContext();
-            var recipeInstanceStep = (from ris in db.RecipeInstanceSteps where ris.RecipeInstanceId == recipeInstanceId && ris.StepId == stepId select ris).FirstOrDefault();
+            var recipeInstanceStep = RecipeInstanceStepHandler.GetRecipeInstanceStep(recipeInstanceStepId, db);
             if (recipeInstanceStep == null) throw new Exception("Cannot find recipeInstanceStep");
 
             //Make sure it's started
